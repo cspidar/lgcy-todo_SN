@@ -1,0 +1,19 @@
+{
+  "NativescriptExtend.fileAssociations": [
+    {
+      "systemId": "c:\\Users\\AA19103\\Desktop\\snTodo\\schema\\tns.xsd",
+      "pattern": "**/**/*.xml"
+    },
+    {
+      "systemId": "http://www.w3.org/2001/XMLSchema.xsd",
+      "pattern": "c:\\Users\\AA19103\\Desktop\\snTodo\\schema\\tns.xsd"
+    }
+  ],
+  "files.exclude": {
+    "schema": true
+  },
+  "NativescriptExtend.format.enabled": true,
+  "NativescriptExtend.validation.enabled": true,
+  "editor.snippetSuggestions": "Bottom",
+  "NativescriptExtend.enable.snippets": true
+}
