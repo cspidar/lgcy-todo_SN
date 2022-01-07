@@ -1,8 +1,11 @@
 <script>
   import { Template } from "svelte-native/components";
+  import Asciidoctor from "../../node_modules/@asciidoctor/core/dist/browser/asciidoctor.js";
+  const asciidoctor = Asciidoctor();
 
   let todos = [];
   let textFieldValue = "";
+  let ascii = asciidoctor.convert("Hello, _Asciidoctor_");
 
   function onItemTap(args) {
     console.log(
@@ -19,7 +22,7 @@
 </script>
 
 <page actionBarHidden="false" androidStatusBarBackground="red">
-  <actionBar title="My Task" />
+  <actionBar title="My Task1" />
   <tabView androidTabsPosition="bottom">
     <tabViewItem title="To Do">
       <gridLayout columns="*,120" rows="70,*">
@@ -29,7 +32,7 @@
           col="0"
           row="0"
           bind:text={textFieldValue}
-          hint="Type new task..."
+          hint={ascii}
           editable="true"
           on:returnPress={onButtonTap}
         />
@@ -42,6 +45,7 @@
         </listView>
       </gridLayout>
     </tabViewItem>
+
     <tabViewItem title="Completed">
       <label textWrap="true">
         This tab will list completed tasks for tracking.
