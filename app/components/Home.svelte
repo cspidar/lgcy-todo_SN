@@ -1,4 +1,6 @@
 <script>
+  import { TextView } from "@nativescript/core";
+
   import { Template } from "svelte-native/components";
   // import Asciidoctor from "../../node_modules/@asciidoctor/core/dist/browser/asciidoctor.js";
   // const asciidoctor = Asciidoctor();
@@ -10,6 +12,30 @@
   //
   let lists = [
     { word: "apple", mean: "🍎 사과" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
+    { word: "banana", mean: "🍌 바나나" },
     { word: "banana", mean: "🍌 바나나" },
   ];
   let words = ["apple", "banana"];
@@ -78,12 +104,13 @@
   }
 </script>
 
-<page actionBarHidden="false" androidStatusBarBackground="red">
-  <actionBar title="My Task1" />
+<page actionBarHidden="false" androidStatusBarBackground="#000">
+  <actionBar class="actionBar" paddingBottom="0px">
+    <button text="Avengers Endgame 단어" col="1" class="action" />
+  </actionBar>
   <tabView androidTabsPosition="bottom">
     <tabViewItem title="To Do">
-      <gridLayout columns="*,*">
-        <!-- <textField
+      <!-- <textField
           col="0"
           row="0"
           bind:text={textFieldValue}
@@ -91,7 +118,7 @@
           editable="true"
           on:returnPress={onButtonTap}
         /> -->
-        <!-- <button
+      <!-- <button
           col="1"
           row="0"
           text="Add task"
@@ -99,17 +126,24 @@
           class="-primary"
         /> -->
 
-        <listView items={lists} on:itemTap={onItemTap} col="0">
-          <Template let:item>
-            <label text={item.word} textWrap="true" />
-          </Template>
-        </listView>
-        <listView items={lists} on:itemTap={onItemTap} col="1">
-          <Template let:item>
-            <label text={item.mean} textWrap="true" />
-          </Template>
-        </listView>
-      </gridLayout>
+      <listView items={lists} on:itemTap={onItemTap} col="0">
+        <Template let:item>
+          <gridLayout columns="*,*">
+            <label
+              text={item.word}
+              textWrap="true"
+              class="card read-word"
+              col="0"
+            />
+            <label
+              text={item.mean}
+              textWrap="true"
+              class="card read-word"
+              col="1"
+            />
+          </gridLayout>
+        </Template>
+      </listView>
     </tabViewItem>
 
     <tabViewItem title="Completed">
@@ -129,5 +163,25 @@
   .todo-item-completed {
     color: #939393;
     text-decoration: line-through;
+  }
+  .card {
+    border: 1px solid black;
+  }
+  .action {
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0px;
+    margin-bottom: 5px;
+    padding: 0px;
+    vertical-align: bottom;
+    width: 700px;
+    height: 120px;
+    /* font-weight: bold; */
+    /* 안드로이드 기본 폰트 확인해서 지정 필요 */
+  }
+  .actionBar {
+    margin: 0;
+    padding-top: 25px;
+    height: 160px;
   }
 </style>
