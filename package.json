@@ -7,7 +7,6 @@
     "@nativescript/core": "~8.1.1",
     "@nativescript/theme": "~3.0.1",
     "asciidoctor": "^2.2.5",
-    "nativescript-status-bar": "^1.2.0",
     "svelte-native": "~1.0.0"
   },
   "devDependencies": {

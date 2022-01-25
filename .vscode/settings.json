@@ -15,5 +15,8 @@
   "NativescriptExtend.format.enabled": true,
   "NativescriptExtend.validation.enabled": true,
   "editor.snippetSuggestions": "Bottom",
-  "NativescriptExtend.enable.snippets": true
+  "NativescriptExtend.enable.snippets": true,
+  "search.exclude": {
+    "**/node_modules": false
+  }
 }

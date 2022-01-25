@@ -1,17 +1,37 @@
 <script>
-  import { TextView } from "@nativescript/core";
+  import { Frame, TextView } from "@nativescript/core";
 
   import { Template } from "svelte-native/components";
   // import Asciidoctor from "../../node_modules/@asciidoctor/core/dist/browser/asciidoctor.js";
   // const asciidoctor = Asciidoctor();
   // let ascii = asciidoctor.convert("Hello, _Asciidoctor_");
 
+  import { Application, Utils, Device } from "@nativescript/core";
+  import { query_selector_all } from "svelte/internal";
+
+  function getActivity() {
+    return Application.android.startActivity;
+  }
+  function statusBarShow() {
+    getActivity()
+      .getWindow()
+      .getDecorView()
+      .setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_VISIBLE);
+  }
+  function statusBarHide() {
+    getActivity()
+      .getWindow()
+      .getDecorView()
+      .setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_FULLSCREEN);
+  }
+  statusBarHide();
+
   let todos = [];
   let dones = [];
 
   //
   let lists = [
-    { word: "apple", mean: "🍎 사과" },
+    { word: "apple", mean: "🍎 사과1" },
     { word: "banana", mean: "🍌 바나나" },
     { word: "banana", mean: "🍌 바나나" },
     { word: "banana", mean: "🍌 바나나" },
@@ -46,11 +66,6 @@
   let textFieldValue = "";
 
   async function onItemTap(args) {
-    // console.log(
-    //   `Item ${todos[args.index].name} at index: ${args.index} was tapped`
-    //   // 인덱스 접근: args.index / todos[args.index].name = todos[0].name
-    // );
-
     let result = await action(
       "What do you want to do with this task?",
       "Cancel",
@@ -72,13 +87,12 @@
     }
   }
 
-  function onButtonTap() {
-    if (textFieldValue === "") return; // Prevents users from entering an empty string.
-    console.log("New task added: " + textFieldValue + "."); // Logs the newly added task in the console for debugging.
-    //
-    todos = [{ name: textFieldValue }, ...todos]; // Adds tasks in the ToDo array. Newly added tasks are immediately shown on the screen.
-    //
-    textFieldValue = ""; // Clears the text field so that users can start adding new tasks immediately.
+  function onWordTap(args) {
+    let btnIndex = args.index;
+    // let btn = args.object;
+    let btn = Frame.query_selector_all(".wordA")[btnIndex];
+    btn.visibility = "visible";
+    console.log(btn.visibility);
   }
 
   async function onDoneTap(args) {
@@ -92,64 +106,71 @@
     let item = dones[args.index];
     switch (result) {
       case "Mark To Do":
-        todos = addToList(todos, item); // Places the tapped active task at the top of the completed tasks.
-        dones = removeFromList(dones, item); // Removes the tapped active task.
+        todos = addToList(todos, item);
+        dones = removeFromList(dones, item);
         break;
       case "Delete forever":
-        dones = removeFromList(dones, item); // Removes the tapped active task.
+        dones = removeFromList(dones, item);
         break;
-      case "Cancel" || undefined: // Dismisses the dialog
+      case "Cancel" || undefined:
         break;
     }
   }
 </script>
 
-<page actionBarHidden="false" androidStatusBarBackground="#000">
-  <actionBar class="actionBar" paddingBottom="0px">
-    <button text="Avengers Endgame 단어" col="1" class="action" />
-  </actionBar>
-  <tabView androidTabsPosition="bottom">
-    <tabViewItem title="To Do">
-      <!-- <textField
-          col="0"
-          row="0"
-          bind:text={textFieldValue}
-          hint="do something!"
-          editable="true"
-          on:returnPress={onButtonTap}
-        /> -->
-      <!-- <button
-          col="1"
-          row="0"
-          text="Add task"
-          on:tap={onButtonTap}
-          class="-primary"
-        /> -->
+<page actionBarHidden="true">
+  <actionBar title="word" class="actionBar" />
 
-      <listView items={lists} on:itemTap={onItemTap} col="0">
+  <tabView
+    androidTabsPosition="top"
+    android:class="android-tab-view"
+    tabBackgroundColor="#31bcff"
+    selectedTabTextColor="#455b66"
+    tabTextColor="#ffffff"
+    androidSelectedTabHighlightColor="#455b66"
+  >
+    <tabViewItem title="&#xf0ca" class="fas tabViewItem">
+      <listView items={lists} on:itemTap={onItemTap}>
         <Template let:item>
           <gridLayout columns="*,*">
             <label
               text={item.word}
               textWrap="true"
-              class="card read-word"
+              class="card readWord"
               col="0"
             />
+            <button class="cardBtn wordAB" on:tap={onWordTap}> wordAB </button>
+            <button
+              id="wordBtn"
+              class="cardBtn wordA"
+              translateX="-50%"
+              width="25.5%"
+              col="0"
+              visibility="hidden"
+            >
+              <formattedString>
+                <span text="&#xf00c;" class="fas" />
+              </formattedString>
+            </button>
+            <button class="cardBtn wordB" translateX="46%" width="25.5%" col="0"
+              >2222</button
+            >
             <label
               text={item.mean}
               textWrap="true"
-              class="card read-word"
+              class="card readMean"
               col="1"
             />
+            <button class="cardBtn" col="1">check1</button>
           </gridLayout>
         </Template>
       </listView>
     </tabViewItem>
 
-    <tabViewItem title="Completed">
+    <tabViewItem title="&#xf560" class="fas tabViewItem">
       <listView items={dones} on:itemTap={onDoneTap}>
         <Template let:item>
-          <label text={item.name} textWrap="true" class="todo-item-completed" />
+          <label text={item.name} textWrap="true" />
         </Template>
       </listView>
     </tabViewItem>
@@ -160,28 +181,33 @@
   label {
     font-size: 16;
   }
-  .todo-item-completed {
-    color: #939393;
-    text-decoration: line-through;
+  .tabViewItem {
+    font-size: 25px;
   }
   .card {
-    border: 1px solid black;
+    background-color: #c8ccdb;
+    border-radius: 3;
   }
-  .action {
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0px;
-    margin-bottom: 5px;
-    padding: 0px;
-    vertical-align: bottom;
-    width: 700px;
-    height: 120px;
-    /* font-weight: bold; */
-    /* 안드로이드 기본 폰트 확인해서 지정 필요 */
+  .readWord {
+    margin-right: 16px;
   }
-  .actionBar {
+
+  .cardBtn {
+    font-size: 30px;
+    color: #000000;
     margin: 0;
-    padding-top: 25px;
-    height: 160px;
+    padding: 0;
+    box-shadow: none;
+    transition: all 0.3s;
+    background-color: #9e343493;
+    /* background-color: #ffffff00; */
   }
+  .cardBtn:hover,
+  .cardBtn:active {
+    box-shadow: 1;
+  }
+  /* .cardBtn.wordA,
+  .cardBtn.wordB {
+    visibility: hidden;
+  } */
 </style>
