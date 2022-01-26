@@ -7,7 +7,7 @@
   // let ascii = asciidoctor.convert("Hello, _Asciidoctor_");
 
   import { Application, Utils, Device } from "@nativescript/core";
-  import { query_selector_all } from "svelte/internal";
+  import { createEventDispatcher } from "svelte";
 
   function getActivity() {
     return Application.android.startActivity;
@@ -87,12 +87,13 @@
     }
   }
 
+  const dispatch = createEventDispatcher();
+
+  let btnShow = "hidden";
   function onWordTap(args) {
-    let btnIndex = args.index;
-    // let btn = args.object;
-    let btn = Frame.query_selector_all(".wordA")[btnIndex];
-    btn.visibility = "visible";
-    console.log(btn.visibility);
+    btnShow = "visible";
+    console.log(btnShow);
+    btnShow = btnShow;
   }
 
   async function onDoneTap(args) {
@@ -139,21 +140,27 @@
               class="card readWord"
               col="0"
             />
-            <button class="cardBtn wordAB" on:tap={onWordTap}> wordAB </button>
+            <button class="cardBtn wordAB" on:tap={onWordTap}> 1wordAB </button>
             <button
               id="wordBtn"
               class="cardBtn wordA"
               translateX="-50%"
               width="25.5%"
               col="0"
-              visibility="hidden"
+              visibility={btnShow}
             >
               <formattedString>
                 <span text="&#xf00c;" class="fas" />
               </formattedString>
             </button>
-            <button class="cardBtn wordB" translateX="46%" width="25.5%" col="0"
-              >2222</button
+            <button
+              class="cardBtn wordB"
+              translateX="46%"
+              width="25.5%"
+              col="0"
+              on:tap={() => {
+                console.log(item.mean);
+              }}>12222</button
             >
             <label
               text={item.mean}
