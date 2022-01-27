@@ -1,5 +1,5 @@
 <script>
-  import { Frame, TextView } from "@nativescript/core";
+  import { Frame, Page, TextView } from "@nativescript/core";
 
   import { Template } from "svelte-native/components";
   // import Asciidoctor from "../../node_modules/@asciidoctor/core/dist/browser/asciidoctor.js";
@@ -66,25 +66,31 @@
   let textFieldValue = "";
 
   async function onItemTap(args) {
-    let result = await action(
-      "What do you want to do with this task?",
-      "Cancel",
-      ["Mark completed", "Delete forever"]
-    );
-    console.log(result); // Logs the selected option for debugging.
-
-    let item = todos[args.index];
-    switch (result) {
-      case "Mark completed":
-        dones = addToList(dones, item); // Places the tapped active task at the top of the completed tasks.
-        todos = removeFromList(todos, item); // Removes the tapped active task.
-        break;
-      case "Delete forever":
-        todos = removeFromList(todos, item); // Removes the tapped active task.
-        break;
-      case "Cancel" || undefined: // Dismisses the dialog
-        break;
-    }
+    let view = args.view;
+    console.log(view);
+    // let item = lists[args.index];
+    // console.log("tap");
+    // view.className = "visible";
+    // console.clear;
+    // console.log(args.view);
+    // let result = await action(
+    //   "What do you want to do with this task?",
+    //   "Cancel",
+    //   ["Mark completed", "Delete forever"]
+    // );
+    // console.log(result);
+    // let item = todos[args.index];
+    // switch (result) {
+    //   case "Mark completed":
+    //     dones = addToList(dones, item);
+    //     todos = removeFromList(todos, item);
+    //     break;
+    //   case "Delete forever":
+    //     todos = removeFromList(todos, item);
+    //     break;
+    //   case "Cancel" || undefined:
+    //     break;
+    // }
   }
 
   const dispatch = createEventDispatcher();
@@ -102,7 +108,7 @@
       "Cancel",
       ["Mark To Do", "Delete forever"]
     );
-    console.log(result); // Logs the selected option for debugging.
+    console.log(result);
 
     let item = dones[args.index];
     switch (result) {
@@ -139,22 +145,21 @@
               textWrap="true"
               class="card readWord"
               col="0"
+              on:click={onItemTap}
             />
-            <button class="cardBtn wordAB" on:tap={onWordTap}> 1wordAB </button>
             <button
-              id="wordBtn"
-              class="cardBtn wordA"
+              id="cardBtnWordA"
+              class="cardBtn hidden"
               translateX="-50%"
               width="25.5%"
               col="0"
-              visibility={btnShow}
             >
               <formattedString>
                 <span text="&#xf00c;" class="fas" />
               </formattedString>
             </button>
             <button
-              class="cardBtn wordB"
+              class="cardBtn hidden"
               translateX="46%"
               width="25.5%"
               col="0"
@@ -168,7 +173,7 @@
               class="card readMean"
               col="1"
             />
-            <button class="cardBtn" col="1">check1</button>
+            <button class="cardBtn hidden" col="1">check1</button>
           </gridLayout>
         </Template>
       </listView>
@@ -188,26 +193,45 @@
   label {
     font-size: 16;
   }
+  .pz {
+    padding: 0;
+    margin: 0;
+  }
   .tabViewItem {
     font-size: 25px;
   }
   .card {
     background-color: #c8ccdb;
     border-radius: 3;
+    height: 90px;
+    text-align: left;
+    margin: 0;
+    color: black;
   }
+  .card:hover,
+  .card:active {
+    box-shadow: 1;
+  }
+
   .readWord {
     margin-right: 16px;
   }
 
   .cardBtn {
+    height: 100px;
     font-size: 30px;
     color: #000000;
     margin: 0;
     padding: 0;
     box-shadow: none;
-    transition: all 0.3s;
     background-color: #9e343493;
     /* background-color: #ffffff00; */
+  }
+  .hidden {
+    visibility: collapse;
+  }
+  .visible {
+    visibility: visible;
   }
   .cardBtn:hover,
   .cardBtn:active {
@@ -217,4 +241,7 @@
   .cardBtn.wordB {
     visibility: hidden;
   } */
+  * {
+    transition: all 0.3s;
+  }
 </style>
